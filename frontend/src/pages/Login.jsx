@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 const Login = () => {
@@ -29,46 +29,102 @@ const Login = () => {
       localStorage.removeItem("refreshToken");
 
       localStorage.setItem("accessToken", response.data.token);
-
       localStorage.setItem("refreshToken", response.data.refreshToken);
 
-      console.log("SAVED ACCESS TOKEN:", localStorage.getItem("accessToken"));
+      await api.get("/auth/me");
 
-      const meResponse = await api.get("/auth/me");
-
-      console.log("ME RESPONSE:", meResponse.data);
       navigate("/products");
-      setMessage("Login successful");
     } catch (error) {
       setMessage(error.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md">
+        <div className="mb-8 text-center">
+          <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-zinc-500">
+            PRODUCT MANAGER
+          </p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
+          <h1 className="text-4xl font-semibold tracking-tight text-white">
+            Welcome back
+          </h1>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
+          <p className="mt-3 text-sm text-zinc-400">
+            Sign in to manage your products.
+          </p>
+        </div>
 
-        <button type="submit">Login</button>
-      </form>
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium text-zinc-200"
+              >
+                Email
+              </label>
 
-      {message && <p>{message}</p>}
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="h-12 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 text-sm text-white outline-none placeholder:text-zinc-600 transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-700"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-zinc-200"
+              >
+                Password
+              </label>
+
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="h-12 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 text-sm text-white outline-none placeholder:text-zinc-600 transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-700"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="h-12 w-full rounded-xl bg-white text-sm font-semibold text-zinc-950 transition hover:bg-zinc-200 active:scale-[0.99]"
+            >
+              Sign in
+            </button>
+          </form>
+
+          {message && (
+            <div className="mt-5 rounded-xl border border-red-900/50 bg-red-950/40 px-4 py-3 text-sm text-red-400">
+              {message}
+            </div>
+          )}
+
+          <div className="mt-6 border-t border-zinc-800 pt-6 text-center">
+            <p className="text-sm text-zinc-500">
+              Don't have an account?{" "}
+              <Link
+                to="/register"
+                className="font-medium text-white transition hover:text-zinc-300"
+              >
+                Create one
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
