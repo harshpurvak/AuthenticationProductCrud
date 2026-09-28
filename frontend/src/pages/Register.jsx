@@ -7,6 +7,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [message, setMessage] = useState("");
@@ -30,6 +31,7 @@ const Register = () => {
         name: "",
         email: "",
         password: "",
+        confirmPassword: "",
       });
     } catch (error) {
       setMessage(
@@ -111,6 +113,26 @@ const Register = () => {
                 name="password"
                 placeholder="Create a password"
                 value={formData.password}
+                onChange={handleChange}
+                required
+                className="h-12 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 text-sm text-white outline-none placeholder:text-zinc-600 transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-700"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirmPassword"
+                className="mb-2 block text-sm font-medium text-zinc-200"
+              >
+                Confirm Password
+              </label>
+
+              <input
+                id="confirmPassword"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
                 onChange={handleChange}
                 required
                 className="h-12 w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 text-sm text-white outline-none placeholder:text-zinc-600 transition focus:border-zinc-400 focus:ring-2 focus:ring-zinc-700"

@@ -5,6 +5,7 @@ const baseURL =
 
 const api = axios.create({
   baseURL,
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
@@ -32,15 +33,12 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-
-        if (!refreshToken) {
-          throw new Error("No refresh token");
-        }
-
         const response = await axios.post(
           `${baseURL}/auth/refresh-token`,
-          { refreshToken }
+          {},
+          {
+            withCredentials: true,
+          }
         );
 
         const newAccessToken = response.data.accessToken;
@@ -52,7 +50,6 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
 
         window.location.href = "/login";
 

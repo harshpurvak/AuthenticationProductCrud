@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
 const productValidator = [
   body("name")
@@ -52,4 +52,13 @@ const productValidator = [
     .bail(),
 ];
 
-module.exports = productValidator;
+const productIdValidator = [
+  param("id")
+    .isMongoId()
+    .withMessage("Invalid product ID"),
+];
+
+module.exports = {
+  productValidator,
+  productIdValidator,
+};

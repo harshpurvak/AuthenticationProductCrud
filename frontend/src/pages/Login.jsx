@@ -26,10 +26,8 @@ const Login = () => {
       const response = await api.post("/auth/login", formData);
 
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
 
       localStorage.setItem("accessToken", response.data.token);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
 
       await api.get("/auth/me");
 
