@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 const Products = () => {
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
 
@@ -75,11 +78,11 @@ const Products = () => {
 
       localStorage.removeItem("accessToken");
 
-      window.location.href = "/login";
+      navigate("/login", { replace: true });
     } catch (error) {
       localStorage.removeItem("accessToken");
 
-      window.location.href = "/login";
+      navigate("/login", { replace: true });
     }
   };
 
@@ -106,7 +109,10 @@ const Products = () => {
 
         setMessage(response.data.message);
 
-        setProducts((prevProducts) => [...prevProducts, response.data.product]);
+        setProducts((prevProducts) => [
+          ...prevProducts,
+          response.data.product,
+        ]);
       }
 
       setFormData({
@@ -138,7 +144,9 @@ const Products = () => {
               PRODUCT MANAGER
             </p>
 
-            <p className="mt-1 text-xs text-zinc-500">Manage your products</p>
+            <p className="mt-1 text-xs text-zinc-500">
+              Manage your products
+            </p>
           </div>
 
           <button
@@ -416,7 +424,9 @@ const Products = () => {
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center">
-                        <span className="text-sm text-zinc-700">No image</span>
+                        <span className="text-sm text-zinc-700">
+                          No image
+                        </span>
                       </div>
                     )}
                   </div>
