@@ -1,12 +1,12 @@
 # Authentication & Product CRUD
 
-A full-stack project made for the Sheryians Coding School assignment.
+This project was built as part of the Sheryians Coding School assignment.
 
-The project has JWT authentication and a Product CRUD API, along with a React frontend to use the APIs.
+The main purpose of this project is to build a JWT-based authentication system, create Product CRUD APIs, validate the API inputs using `express-validator`, and connect everything with a React frontend.
 
 ## Tech Used
 
-**Backend**
+### Backend
 
 * Node.js
 * Express.js
@@ -15,36 +15,48 @@ The project has JWT authentication and a Product CRUD API, along with a React fr
 * JWT
 * bcryptjs
 * express-validator
+* cookie-parser
+* CORS
 
-**Frontend**
+### Frontend
 
 * React
 * Vite
 * React Router
 * Axios
 
-## Features
+## What I Built
 
 ### Authentication
 
-* Register
-* Login
-* JWT access token
+The authentication system includes:
+
+* User registration
+* User login
+* Access token
 * Refresh token
+* Refresh token stored in an httpOnly cookie
+* Refresh token stored with the user for revocation
+* Automatic access token refresh
 * Logout
-* Get current user
+* Logged-in user details
 * Protected routes
 
-### Products
+During registration, the password is hashed using bcrypt before it is stored in the database.
 
-* Get all products
-* Get product by ID
-* Create product
-* Update product
-* Delete product
-* Validation for product fields
+After login, the backend sends the access token in the response. The refresh token is stored in an httpOnly cookie, so it is not directly accessible from frontend JavaScript.
 
-Create, update and delete operations require authentication.
+### Product CRUD
+
+The Product API supports:
+
+* Creating a product
+* Getting all products
+* Getting a product by ID
+* Updating a product
+* Deleting a product
+
+Creating, updating and deleting products require a valid access token.
 
 ## Project Structure
 
@@ -58,19 +70,86 @@ AuthenticationProductCrud/
 │   ├── routes/
 │   ├── validators/
 │   ├── app.js
-│   └── server.js
+│   ├── server.js
+│   └── package.json
 │
 ├── frontend/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       └── services/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── services/
+│   ├── vercel.json
+│   └── package.json
 │
 ├── .gitignore
 └── README.md
 ```
 
-## Setup
+## How Authentication Works
+
+When a user registers, the password is first hashed using bcrypt and then saved in MongoDB.
+
+When the user logs in, the backend checks the email and password. If they are correct, two tokens are created:
+
+* Access token — expires in 15 minutes
+* Refresh token — expires in 7 days
+
+The access token is returned in the login response and is used for protected API requests.
+
+The refresh token is stored in an httpOnly cookie and also stored with the user in the database.
+
+When the access token expires, the frontend sends a request to the refresh-token endpoint. The browser automatically sends the refresh token cookie with that request. The backend verifies it and sends back a new access token.
+
+When the user logs out, the stored refresh token is removed and the refresh token cookie is cleared.
+
+## Validation
+
+I used `express-validator` for validating authentication and product requests.
+
+For example, registration checks the name, email, password and confirm password. Product requests also validate fields such as price, stock, category and product ID.
+
+If the request is invalid, the API returns a `400` response with the validation errors.
+
+## API Routes
+
+### Authentication
+
+| Method | Route                     | Access        |
+| ------ | ------------------------- | ------------- |
+| POST   | `/api/auth/register`      | Public        |
+| POST   | `/api/auth/login`         | Public        |
+| POST   | `/api/auth/refresh-token` | Refresh Token |
+| POST   | `/api/auth/logout`        | Authenticated |
+| GET    | `/api/auth/me`            | Authenticated |
+
+### Products
+
+| Method | Route               | Access        |
+| ------ | ------------------- | ------------- |
+| GET    | `/api/products`     | Public        |
+| GET    | `/api/products/:id` | Public        |
+| POST   | `/api/products`     | Authenticated |
+| PUT    | `/api/products/:id` | Authenticated |
+| DELETE | `/api/products/:id` | Authenticated |
+
+## Frontend
+
+The frontend has:
+
+* Register page
+* Login page
+* Protected Products page
+* Product listing
+* Create product form
+* Edit product form
+* Delete functionality
+* Logout
+
+Axios is used to communicate with the backend API.
+
+The access token is stored on the frontend and sent in the `Authorization` header for protected requests.
+
+## Running the Project Locally
 
 ### Backend
 
@@ -79,16 +158,18 @@ cd backend
 npm install
 ```
 
-Create a `.env` file inside `backend`:
+Create a `.env` file:
 
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
+ACCESS_TOKEN_SECRET=your_access_token_secret
 REFRESH_TOKEN_SECRET=your_refresh_token_secret
+FRONTEND_URL=http://localhost:5173
+NODE_ENV=development
 ```
 
-Start the server:
+Run the backend:
 
 ```bash
 npm run dev
@@ -104,49 +185,19 @@ npm install
 npm run dev
 ```
 
-The frontend will run on the Vite URL shown in the terminal.
+For local development, the frontend API URL can be set using:
 
-## API Routes
-
-### Auth
-
-| Method | Route                     | Auth          |
-| ------ | ------------------------- | ------------- |
-| POST   | `/api/auth/register`      | No            |
-| POST   | `/api/auth/login`         | No            |
-| GET    | `/api/auth/me`            | Yes           |
-| POST   | `/api/auth/refresh-token` | Refresh token |
-| POST   | `/api/auth/logout`        | Yes           |
-
-### Products
-
-| Method | Route               | Auth |
-| ------ | ------------------- | ---- |
-| GET    | `/api/products`     | No   |
-| GET    | `/api/products/:id` | No   |
-| POST   | `/api/products`     | Yes  |
-| PUT    | `/api/products/:id` | Yes  |
-| DELETE | `/api/products/:id` | Yes  |
-
-## Authentication
-
-After login, the frontend stores the access token and refresh token.
-
-The access token is sent with protected requests. If the access token expires, the Axios interceptor uses the refresh token to get a new access token and retries the original request.
-
-On logout, the refresh token is removed from the user account.
-
-## Validation
-
-`express-validator` is used for authentication and product validation.
-
-Invalid requests return `400` with the validation errors.
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
 ## Live Project
 
-**Frontend:** https://authentication-product-crud.vercel.app/
+Frontend:
+https://authentication-product-crud.vercel.app/
 
-**Backend:** https://authenticationproductcrud.onrender.com/
+Backend:
+https://authenticationproductcrud.onrender.com/
 
 ## GitHub
 
