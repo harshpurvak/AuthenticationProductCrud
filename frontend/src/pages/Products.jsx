@@ -71,19 +71,13 @@ const Products = () => {
 
   const handleLogout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshToken");
-
-      await api.post("/auth/logout", {
-        refreshToken,
-      });
+      await api.post("/auth/logout");
 
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
 
       window.location.href = "/login";
     } catch (error) {
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
 
       window.location.href = "/login";
     }
@@ -112,10 +106,7 @@ const Products = () => {
 
         setMessage(response.data.message);
 
-        setProducts((prevProducts) => [
-          ...prevProducts,
-          response.data.product,
-        ]);
+        setProducts((prevProducts) => [...prevProducts, response.data.product]);
       }
 
       setFormData({
@@ -147,9 +138,7 @@ const Products = () => {
               PRODUCT MANAGER
             </p>
 
-            <p className="mt-1 text-xs text-zinc-500">
-              Manage your products
-            </p>
+            <p className="mt-1 text-xs text-zinc-500">Manage your products</p>
           </div>
 
           <button
@@ -427,9 +416,7 @@ const Products = () => {
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center">
-                        <span className="text-sm text-zinc-700">
-                          No image
-                        </span>
+                        <span className="text-sm text-zinc-700">No image</span>
                       </div>
                     )}
                   </div>
