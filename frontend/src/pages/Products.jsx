@@ -415,7 +415,7 @@ const Products = () => {
                   className="group overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900 transition hover:-translate-y-1 hover:border-zinc-700"
                 >
                   {/* Product Image */}
-                  <div className="aspect-[4/3] overflow-hidden bg-zinc-950">
+                  <div className="`aspect-4/3` overflow-hidden bg-zinc-950">
                     {product.image ? (
                       <img
                         src={product.image}
