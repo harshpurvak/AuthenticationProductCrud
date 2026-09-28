@@ -142,4 +142,12 @@ On logout, the refresh token is removed from the user account.
 
 Invalid requests return `400` with the validation errors.
 
+## Live Project
 
+**Frontend:** https://authentication-product-crud.vercel.app/
+
+**Backend:** https://authenticationproductcrud.onrender.com/
+
+## GitHub
+
+https://github.com/harshpurvak/AuthenticationProductCrud
