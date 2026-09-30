@@ -108,7 +108,7 @@ I used `express-validator` for validating authentication and product requests.
 
 For example, registration checks the name, email, password and confirm password. Product requests also validate fields such as price, stock, category and product ID.
 
-If the request is invalid, the API returns a `400` response with the validation errors.
+If the request is invalid, the API returns a `400` response with the validation errors
 
 ## API Routes
 
