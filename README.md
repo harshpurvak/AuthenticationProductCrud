@@ -42,7 +42,7 @@ The authentication system includes:
 * Logged-in user details
 * Protected routes
 
-During registration, the password is hashed using bcrypt before it is stored in the database.
+During registration, the password is hashed using bcrypt before it is stored in the database
 
 After login, the backend sends the access token in the response. The refresh token is stored in an httpOnly cookie, so it is not directly accessible from frontend JavaScript.
 
