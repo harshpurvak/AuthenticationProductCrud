@@ -2,7 +2,7 @@
 
 This project was built as part of the Sheryians Coding School assignment.
 
-The main purpose of this project is to build a JWT-based authentication system, create Product CRUD APIs, validate the API inputs using `express-validator`, and connect everything with a React frontend.
+The main purpose of this project is to build a JWT-based authentication system, create Product CRUD APIs, validate the API inputs using `express-validator`, and connect everything with a React frontend
 
 ## Tech Used
 
